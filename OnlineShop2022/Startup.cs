@@ -55,13 +55,15 @@ namespace OnlineShop2022
             app.UseEndpoints(endpoints =>
             {
 
-            endpoints.MapControllerRoute(
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "product",
                     pattern: "{contoller=Product}/{action=Index}/{id?}");
 
-            endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+           
             });
         }
     }

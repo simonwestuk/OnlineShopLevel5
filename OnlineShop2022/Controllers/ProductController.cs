@@ -37,19 +37,92 @@ namespace OnlineShop2022.Controllers
             {
                 await _db.Products.AddAsync(product);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
-        public IActionResult Update()
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, ProductModel product)
         {
-            return View();
+            if (id != product.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _db.Products.Update(product);
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return NotFound();
+                }
+            }
+            return View(product);
         }
 
-        public IActionResult Delete()
+        //GET
+        public async Task<IActionResult> Update(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ProductModel currentProduct = await _db.Products.FindAsync(id);
+
+            if (currentProduct == null)
+            {
+                return NotFound();
+            }
+
+            return View(currentProduct);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id, ProductModel model)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ProductModel productToDelete = await _db.Products.FindAsync(id);
+
+            if (productToDelete == null)
+            {
+                return NotFound();
+            }
+
+             _db.Products.Remove(productToDelete);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
+
+
+
+        //GET
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ProductModel currentProduct = await _db.Products.FindAsync(id);
+
+            if (currentProduct == null)
+            {
+                return NotFound();
+            }
+
+            return View(currentProduct);
         }
 
 
