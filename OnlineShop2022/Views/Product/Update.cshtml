@@ -5,7 +5,7 @@
 
 
 <div class="container">
-    <form method="post" asp-action="Update">
+    <form method="post" asp-action="Update" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="">
             <div class="mb-3">
@@ -17,6 +17,10 @@
                 <label for="price" class="form-label">Price</label>
                 <input asp-for="Price" type="text" class="form-control" id="price" placeholder="Price" name="price">
                 <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Product Image</label>
+                <input class="form-control" asp-for="ImagePath" type="file" id="formFile">
             </div>
             <div class="mb-3">
                 <button class="btn btn-info" type="submit">Update Product</button>

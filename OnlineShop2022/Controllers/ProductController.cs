@@ -6,16 +6,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using OnlineShop2022.Helpers;
 
 namespace OnlineShop2022.Controllers
 {
     public class ProductController : Controller
     {
         private readonly AppDbContext _db;
+        private IWebHostEnvironment _webHostEnvironment;
+        private Images _images;
 
-        public ProductController(AppDbContext db)
+        public ProductController(AppDbContext db, IWebHostEnvironment webHostEnvironment, Images images)
         {
+            _webHostEnvironment = webHostEnvironment;
             _db = db;
+            _images = images;
         }
         public async Task<IActionResult> Index()
         {
@@ -32,12 +39,25 @@ namespace OnlineShop2022.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductModel product)
         {
-
             if (ModelState.IsValid)
             {
-                await _db.Products.AddAsync(product);
-                await _db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var file = Request.Form.Files[0];
+
+                    if (file != null)
+                    {
+                        product.ImagePath = _images.Upload(file, $"/images/products/");
+                        await _db.Products.AddAsync(product);
+                        await _db.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                catch (Exception)
+                {
+                    return View(product);
+                }
+                 
             }
             return View(product);
         }
