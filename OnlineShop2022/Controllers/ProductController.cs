@@ -65,6 +65,8 @@ namespace OnlineShop2022.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(int id, ProductModel product)
         {
+            
+
             if (id != product.Id)
             {
                 return NotFound();
@@ -74,6 +76,19 @@ namespace OnlineShop2022.Controllers
             {
                 try
                 {
+                    try
+                    {
+                        var file = Request.Form.Files[0];
+
+                        if (file != null)
+                        {
+                            _images.Delete(product.ImagePath);
+                            product.ImagePath = _images.Upload(file, $"/images/products/");
+                        }
+                    }
+                    catch(Exception)
+                    { }
+                   
                     _db.Products.Update(product);
                     await _db.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -121,6 +136,9 @@ namespace OnlineShop2022.Controllers
 
              _db.Products.Remove(productToDelete);
             await _db.SaveChangesAsync();
+
+            _images.Delete(productToDelete.ImagePath);
+
             return RedirectToAction(nameof(Index));
 
         }

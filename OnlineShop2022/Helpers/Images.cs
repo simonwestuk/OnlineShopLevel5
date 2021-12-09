@@ -32,5 +32,18 @@ namespace OnlineShop2022.Helpers
 
             return $"{path}{newFileName}{ext}";
         }
+
+        public bool Delete(string path)
+        {
+            path = _webHostEnvironment.WebRootPath + path;
+
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

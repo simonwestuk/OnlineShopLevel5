@@ -19,7 +19,8 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label for="formFile" class="form-label">Product Image</label>
+                <img src="@Model.ImagePath" class="img-thumbnail img-product">
+                <input type="hidden" asp-for="ImagePath" />
                 <input class="form-control" asp-for="ImagePath" type="file" id="formFile">
             </div>
             <div class="mb-3">

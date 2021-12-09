@@ -4,10 +4,21 @@ for details on configuring this project to bundle and minify static web assets. 
     height: 20vh;
 }
 
+.img-product-main {
+    height: 40vh;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0 !important;
+}
+
+.card {
+    border-radius: 0 !important;
+}
+
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 
