@@ -31,7 +31,8 @@ namespace OnlineShop2022
             services.AddScoped<Images>();
             services.AddControllersWithViews();
 
-            services.AddDbContext<AppDbContext>(options => {
+            services.AddDbContext<AppDbContext>(options =>
+            {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnectionString"));
             });
             services.AddIdentity<CustomUserModel, IdentityRole>()
@@ -62,10 +63,14 @@ namespace OnlineShop2022
 
             app.UseAuthorization();
 
-            
+
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                     name: "areas",
+                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
 
                 endpoints.MapControllerRoute(
                     name: "default",
@@ -77,7 +82,7 @@ namespace OnlineShop2022
 
                 endpoints.MapRazorPages();
 
-           
+
             });
         }
     }
