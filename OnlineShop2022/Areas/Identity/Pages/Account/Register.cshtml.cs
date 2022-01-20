@@ -87,12 +87,13 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
 
-                    if (await _roleManager.RoleExistsAsync("Customer"))
+                    if (!await _roleManager.RoleExistsAsync("Customer"))
                     {
                         await _roleManager.CreateAsync(new IdentityRole("Customer"));
                     }
+                    await _userManager.AddToRoleAsync(user, "Customer");
 
-                    await _userManager.CreateAsync(user, "Customer");
+                    
 
 
 
