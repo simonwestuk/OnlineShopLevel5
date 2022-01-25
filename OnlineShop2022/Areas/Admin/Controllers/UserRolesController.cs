@@ -52,10 +52,34 @@ namespace OnlineShop2022.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Manage()
+        public async Task<IActionResult> Manage(string id)
         {
-            return View();
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var viewModels = new List<ManageUserRoleViewModel>();
+            foreach (var role in _roleManager.Roles)
+            {
+                var vm = new ManageUserRoleViewModel();
+                vm.User = user;
+                vm.Role = role;
+                vm.IsInRole = await _userManager.IsInRoleAsync(user, role.Name);
+                viewModels.Add(vm);
+            }
+
+            return View(viewModels);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Manage(IEnumerable<ManageUserRoleViewModel> model)
+        {
+            return RedirectToAction("Index");
+        }
+
+
 
 
     }
