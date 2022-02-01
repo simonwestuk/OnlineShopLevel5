@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop2022.Areas.Admin.Models;
 using OnlineShop2022.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineShop2022.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Super Admin")]
     [Area("Admin")]
     public class UserRolesController : Controller
     {
@@ -39,8 +42,8 @@ namespace OnlineShop2022.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-         
-            if(user == null)
+
+            if (user == null)
             {
                 return RedirectToAction("Index");
             }
@@ -52,10 +55,11 @@ namespace OnlineShop2022.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        //GET
         public async Task<IActionResult> Manage(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if(user == null)
+            if (user == null)
             {
                 return RedirectToAction("Index");
             }
@@ -74,9 +78,47 @@ namespace OnlineShop2022.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Manage(IEnumerable<ManageUserRoleViewModel> model)
+        public async Task<IActionResult> Manage(List<ManageUserRoleViewModel> model)
         {
-            return RedirectToAction("Index");
+            if (model != null && model.Count >= 1)
+            {
+                var user = await _userManager.FindByIdAsync(model[0].User.Id);
+
+                if (user != null)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var result = await _userManager.RemoveFromRolesAsync(user, roles);
+
+                    if (!result.Succeeded)
+                    {
+
+                        ModelState.AddModelError("1", "Error Removing Roles.");
+                        return View(model);
+                    }
+                    result = await _userManager.AddToRolesAsync(user, model.Where(x => x.IsInRole).Select(y => y.Role.Name));
+
+                    if (!result.Succeeded)
+                    {
+
+                        ModelState.AddModelError("3", "Error Adding Roles.");
+                        return View(model);
+                    }
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("2", "User Not Found.");
+                    return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Manage");
+            }
+
+
+
+
         }
 
 
