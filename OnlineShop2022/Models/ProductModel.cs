@@ -17,5 +17,7 @@ namespace OnlineShop2022.Models
         public double Price { get; set; }
 
         public string ImagePath { get; set; }
+
+
     }
 }

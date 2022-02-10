@@ -13,5 +13,7 @@ namespace OnlineShop2022.Data
         {
 
         }
+
+        public DbSet<OnlineShop2022.Models.CategoryModel> CategoryModel { get; set; }
     }
 }

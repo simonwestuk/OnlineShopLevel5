@@ -30,6 +30,13 @@ namespace OnlineShop2022.Controllers
             return View(products);
         }
 
+        public async Task<IActionResult> Products(string id)
+        {
+            var products = await _db.Products.ToListAsync();
+            return View(products);
+        }
+
+
         public IActionResult Privacy()
         {
             return View();
