@@ -19,23 +19,25 @@
             @{
                 currentUser = await UserManager.FindByEmailAsync(User.Identity.Name);
 
-                if (await UserManager.IsInRoleAsync(currentUser, "Manager"))
+                if (await UserManager.IsInRoleAsync(currentUser, "Manager") || await UserManager.IsInRoleAsync(currentUser, "Admin"))
                 {
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
                     </li>
-                    if (await UserManager.IsInRoleAsync(currentUser, "Admin"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="RolesManager" asp-action="Index">Roles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="UserRoles" asp-action="Index">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index">Categories</a>
-                        </li>
-                    }
+
+                }
+
+                if (await UserManager.IsInRoleAsync(currentUser, "Admin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="RolesManager" asp-action="Index">Roles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="UserRoles" asp-action="Index">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index">Categories</a>
+                    </li>
                 }
             }
 

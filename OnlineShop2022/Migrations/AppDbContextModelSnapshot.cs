@@ -55,6 +55,13 @@ namespace OnlineShop2022.Migrations
                             ConcurrencyStamp = "d4e41d27-8605-4e69-8587-2636ed98e286",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "709a40af-4a4e-40b6-887b-d30dcdf07030",
+                            ConcurrencyStamp = "db72e6db-01bf-432b-8675-1d08242bb162",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
                         });
                 });
 
@@ -150,6 +157,11 @@ namespace OnlineShop2022.Migrations
                         {
                             UserId = "27b9af34-a133-43e2-8dd2-aef04ddb2b8c",
                             RoleId = "ecfbe7ad-bb6b-49e6-ac2b-6359a73fbf02"
+                        },
+                        new
+                        {
+                            UserId = "27b9af34-a133-43e2-8dd2-aef04ddb2b8c",
+                            RoleId = "709a40af-4a4e-40b6-887b-d30dcdf07030"
                         });
                 });
 
@@ -270,9 +282,9 @@ namespace OnlineShop2022.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENQ0vdVSzWkm1mYhrm07Tc3uBGbyTp6pyCItFr8Lw8hjRTimmbPaW7TBoktwdRYV2A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFtMzWTUmA6tXNdyIE9GWdEIYWMpzCpe7teBoPeNjFjHNdYTt6G68xXUokw/g1j3+g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1248e641-aa24-468e-9a03-1b693d341231",
+                            SecurityStamp = "78ff3a01-2508-4465-85b3-37d88f36eff4",
                             Sname = "Admin",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
