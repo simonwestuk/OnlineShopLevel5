@@ -50,8 +50,10 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name = "Firstname")]
             public string Fname { get; set; }
             [Required]
+            [Display(Name = "Surname")]
             public string Sname { get; set; }
             [Required]
             [EmailAddress]

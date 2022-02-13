@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop2022.Areas.Admin.Controllers
 {
-    [Authorize (Roles = "Admin,Super Admin")]
+    [Authorize (Roles = "Admin")]
     [Area("Admin")]
     public class RolesManagerController : Controller
     {

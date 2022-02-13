@@ -196,7 +196,7 @@ namespace OnlineShop2022.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryModel");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("OnlineShop2022.Models.CustomUserModel", b =>
@@ -282,13 +282,95 @@ namespace OnlineShop2022.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFtMzWTUmA6tXNdyIE9GWdEIYWMpzCpe7teBoPeNjFjHNdYTt6G68xXUokw/g1j3+g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDjB2ydvTIXT4D3bbScPBZNDz1yIv4k/IZ//bNhIvLR7b3HPAC1JuRF5F4XO5z6rpQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "78ff3a01-2508-4465-85b3-37d88f36eff4",
+                            SecurityStamp = "b3dce930-90ca-481b-b878-0209c967a6aa",
                             Sname = "Admin",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
+                });
+
+            modelBuilder.Entity("OnlineShop2022.Models.OrderDetailModel", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
+                });
+
+            modelBuilder.Entity("OnlineShop2022.Models.OrderModel", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AddressLine2")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OrderPlaced")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("OrderTotal")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Postcode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("OnlineShop2022.Models.ProductModel", b =>
@@ -319,6 +401,28 @@ namespace OnlineShop2022.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("OnlineShop2022.Models.ShoppingCartItemModel", b =>
+                {
+                    b.Property<int>("ShoppingCartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ShoppingCartId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ShoppingCartItemId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -372,6 +476,25 @@ namespace OnlineShop2022.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OnlineShop2022.Models.OrderDetailModel", b =>
+                {
+                    b.HasOne("OnlineShop2022.Models.OrderModel", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineShop2022.Models.ProductModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("OnlineShop2022.Models.ProductModel", b =>
                 {
                     b.HasOne("OnlineShop2022.Models.CategoryModel", "Category")
@@ -381,6 +504,15 @@ namespace OnlineShop2022.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("OnlineShop2022.Models.ShoppingCartItemModel", b =>
+                {
+                    b.HasOne("OnlineShop2022.Models.ProductModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

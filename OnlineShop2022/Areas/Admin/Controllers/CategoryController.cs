@@ -11,7 +11,7 @@ using OnlineShop2022.Models;
 
 namespace OnlineShop2022.Areas.Admin
 {
-    [Authorize(Roles = "Admin,Super Admin")]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class CategoryController : Controller
     {
@@ -25,7 +25,7 @@ namespace OnlineShop2022.Areas.Admin
         // GET: Admin/Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CategoryModel.ToListAsync());
+            return View(await _context.Categories.ToListAsync());
         }
 
         // GET: Admin/Category/Details/5
@@ -36,7 +36,7 @@ namespace OnlineShop2022.Areas.Admin
                 return NotFound();
             }
 
-            var categoryModel = await _context.CategoryModel
+            var categoryModel = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (categoryModel == null)
             {
@@ -76,7 +76,7 @@ namespace OnlineShop2022.Areas.Admin
                 return NotFound();
             }
 
-            var categoryModel = await _context.CategoryModel.FindAsync(id);
+            var categoryModel = await _context.Categories.FindAsync(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -127,7 +127,7 @@ namespace OnlineShop2022.Areas.Admin
                 return NotFound();
             }
 
-            var categoryModel = await _context.CategoryModel
+            var categoryModel = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (categoryModel == null)
             {
@@ -142,15 +142,15 @@ namespace OnlineShop2022.Areas.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categoryModel = await _context.CategoryModel.FindAsync(id);
-            _context.CategoryModel.Remove(categoryModel);
+            var categoryModel = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(categoryModel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryModelExists(int id)
         {
-            return _context.CategoryModel.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

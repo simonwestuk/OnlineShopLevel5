@@ -14,6 +14,7 @@
                     <div class="card-body">
                         <p class="card-text">@product.Description</p>
                          <p class="card-text">£@product.Price</p>
+                           <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-ProductId="@product.Id">Add to cart</a>
                     </div>
                 </div>
             </div>

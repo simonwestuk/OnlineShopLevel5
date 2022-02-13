@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop2022.Models;
@@ -10,16 +9,19 @@ namespace OnlineShop2022.Data
     {
         public DbSet<ProductModel> Products { get; set; }
 
-        public DbSet<OnlineShop2022.Models.CategoryModel> CategoryModel { get; set; }
-
+        public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<ShoppingCartItemModel> ShoppingCartItems { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
+        public DbSet<OrderDetailModel> OrderDetails { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
 
         }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
+    
+
             base.OnModelCreating(builder);
             SeedAdmin(builder);
             SeedRoles(builder);

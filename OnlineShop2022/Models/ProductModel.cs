@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,9 +22,12 @@ namespace OnlineShop2022.Models
 
         public string Colour { get; set; }
 
+        
         [Required]
         public int CategoryId { get; set; }
 
+        //[BindNever]
+      //  [Required]
         [ForeignKey("CategoryId")]
         public CategoryModel Category { get; set; }
 

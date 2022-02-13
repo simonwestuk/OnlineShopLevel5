@@ -24,16 +24,18 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
         private readonly UserManager<CustomUserModel> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
-
+        private readonly RoleManager<IdentityRole> _roleManager;
         public ExternalLoginModel(
             SignInManager<CustomUserModel> signInManager,
             UserManager<CustomUserModel> userManager,
             ILogger<ExternalLoginModel> logger,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _roleManager = roleManager;
             _emailSender = emailSender;
         }
 
@@ -52,6 +54,13 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "Firstname")]
+            public string Fname { get; set; }
+            [Required]
+            [Display(Name = "Surname")]
+            public string Sname { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -86,6 +95,8 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
             if (result.Succeeded)
             {
+             
+
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
@@ -122,7 +133,7 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new CustomUserModel { UserName = Input.Email, Email = Input.Email };
+                var user = new CustomUserModel { UserName = Input.Email, Email = Input.Email,  Fname = Input.Fname, Sname = Input.Sname};
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -130,6 +141,12 @@ namespace OnlineShop2022.Areas.Identity.Pages.Account
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
+                        if (!await _roleManager.RoleExistsAsync("Customer"))
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                        }
+                        await _userManager.AddToRoleAsync(user, "Customer");
+
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
                         var userId = await _userManager.GetUserIdAsync(user);

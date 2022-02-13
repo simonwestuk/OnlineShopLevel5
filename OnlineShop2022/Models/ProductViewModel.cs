@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace OnlineShop2022.Models
 {
@@ -6,6 +7,6 @@ namespace OnlineShop2022.Models
     {
         public ProductModel Product { get; set; }
 
-        public IEnumerable<CategoryModel> Categories { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; }
     }
 }

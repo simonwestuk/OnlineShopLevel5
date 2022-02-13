@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using OnlineShop2022.Data;
 using OnlineShop2022.Helpers;
 using OnlineShop2022.Models;
+using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,28 @@ namespace OnlineShop2022
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddDefaultUI()
                     .AddDefaultTokenProviders();
+
+            services.AddAuthentication()
+                    .AddGoogle(options =>
+                    {
+                        IConfigurationSection googleAuthNSection =
+                            Configuration.GetSection("Authentication:Google");
+
+                        options.ClientId = googleAuthNSection["ClientId"];
+                        options.ClientSecret = googleAuthNSection["ClientSecret"];
+                    });
+
+            services.AddScoped<ShoppingCartModel>(sp => ShoppingCartModel.GetCart(sp));
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
+            services.AddSession();
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +86,7 @@ namespace OnlineShop2022
 
             app.UseAuthorization();
 
-
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -78,7 +101,7 @@ namespace OnlineShop2022
 
                 endpoints.MapControllerRoute(
                     name: "product",
-                    pattern: "{contoller=Product}/{action=Index}/{id?}");
+                    pattern: "{area:exists}/{contoller=Product}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
 

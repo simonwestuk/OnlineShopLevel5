@@ -3,10 +3,11 @@
 @{
     ViewData["Title"] = "Role Manager";
 }
+<h1>Roles Management</h1>
 
 <form method="post" asp-action="AddRole" asp-controller="RolesManager">
     <div class="input-group">
-        <input name="roleName" class="form-carousel-control-next w-25" />
+        <input name="roleName" class="form-control w-25" />
         <span class="input-group-btn">
             <button class="btn btn-info">Add New Role</button>
         </span>

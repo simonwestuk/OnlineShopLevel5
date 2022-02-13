@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using OnlineShop2022.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace OnlineShop2022.Controllers
+namespace OnlineShop2022.Areas.Admin
 {
+    [Area("Admin")]
     [Authorize(Roles = "Manager")]
     public class ProductController : Controller
     {
@@ -35,12 +37,23 @@ namespace OnlineShop2022.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var vm = new ProductViewModel()
+            {
+                Categories = _db.Categories.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+                Product = new ProductModel()
+            };
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ProductModel product)
+        public async Task<IActionResult> Create(ProductViewModel vm)
         {
+
+
             if (ModelState.IsValid)
             {
                 try
@@ -49,27 +62,40 @@ namespace OnlineShop2022.Controllers
 
                     if (file != null)
                     {
-                        product.ImagePath = _images.Upload(file, $"/images/products/");
-                        await _db.Products.AddAsync(product);
+                        vm.Product.ImagePath = _images.Upload(file, $"/images/products/");
+
+                        await _db.Products.AddAsync(vm.Product);
                         await _db.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
                     }
                 }
                 catch (Exception)
                 {
-                    return View(product);
+
+                    vm.Categories = _db.Categories.Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                    });
+                    return View(vm);
                 }
-                 
+
             }
-            return View(product);
+
+            vm.Categories = _db.Categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, ProductModel product)
+        public async Task<IActionResult> Update(int id, ProductViewModel vm)
         {
-            
 
-            if (id != product.Id)
+            if (id != vm.Product.Id)
             {
                 return NotFound();
             }
@@ -78,20 +104,16 @@ namespace OnlineShop2022.Controllers
             {
                 try
                 {
-                    try
+
+                    if (Request.Form.Files.Count() > 0)
                     {
                         var file = Request.Form.Files[0];
-
-                        if (file != null)
-                        {
-                            _images.Delete(product.ImagePath);
-                            product.ImagePath = _images.Upload(file, $"/images/products/");
-                        }
+                        _images.Delete(vm.Product.ImagePath);
+                        vm.Product.ImagePath = _images.Upload(file, $"/images/products/");
                     }
-                    catch(Exception)
-                    { }
-                   
-                    _db.Products.Update(product);
+
+
+                    _db.Products.Update(vm.Product);
                     await _db.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -100,7 +122,13 @@ namespace OnlineShop2022.Controllers
                     return NotFound();
                 }
             }
-            return View(product);
+
+            vm.Categories = _db.Categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+            return View(vm);
         }
 
         //GET
@@ -118,7 +146,17 @@ namespace OnlineShop2022.Controllers
                 return NotFound();
             }
 
-            return View(currentProduct);
+            var vm = new ProductViewModel()
+            {
+                Categories = _db.Categories.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+                Product = currentProduct
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
@@ -136,7 +174,7 @@ namespace OnlineShop2022.Controllers
                 return NotFound();
             }
 
-             _db.Products.Remove(productToDelete);
+            _db.Products.Remove(productToDelete);
             await _db.SaveChangesAsync();
 
             _images.Delete(productToDelete.ImagePath);
