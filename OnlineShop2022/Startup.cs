@@ -9,11 +9,13 @@ using Microsoft.Extensions.Hosting;
 using OnlineShop2022.Data;
 using OnlineShop2022.Helpers;
 using OnlineShop2022.Models;
+using Stripe;
 using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace OnlineShop2022
 {
@@ -57,11 +59,10 @@ namespace OnlineShop2022
 
             services.AddSession();
 
-            var service = new SessionService();
-            Session session = service.Create(options);
 
-            Response.Headers.Add("Location", session.Url);
-            return new StatusCodeResult(303);
+
+            StripeConfiguration.ApiKey = "sk_test_51KSqXzKY0LFPGSfiFxp7NftS818peyPNq6LW7axdrmwVvJVQIr9e0euHpUqeJI1yCOOFU0Ok5Df7r73q0t7b7Gaf00M9v8rJGE";
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
