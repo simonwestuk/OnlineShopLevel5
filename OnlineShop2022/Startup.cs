@@ -46,11 +46,8 @@ namespace OnlineShop2022
             services.AddAuthentication()
                     .AddGoogle(options =>
                     {
-                        IConfigurationSection googleAuthNSection =
-                            Configuration.GetSection("Authentication:Google");
-
-                        options.ClientId = googleAuthNSection["ClientId"];
-                        options.ClientSecret = googleAuthNSection["ClientSecret"];
+                        options.ClientId = "162304518691-59n88b82gjnon60rud6e7nbktsv72f86.apps.googleusercontent.com";
+                        options.ClientSecret = "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";
                     });
 
             services.AddScoped<ShoppingCartModel>(sp => ShoppingCartModel.GetCart(sp));
