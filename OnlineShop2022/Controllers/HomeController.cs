@@ -24,9 +24,36 @@ namespace OnlineShop2022.Controllers
             _db = db;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string q, string sortBy)
         {
-            var products = await _db.Products.ToListAsync();
+            List<ProductModel> products;
+            ViewData["q"] = q;
+
+            if (q != null)
+            {
+                products = await _db.Products.Where(p => p.Description.ToLower().Contains(q.ToLower())).ToListAsync();            
+            }
+            else
+            {
+                products = await _db.Products.ToListAsync();
+               
+            }
+            switch(sortBy)
+            {
+                case "price":
+                    return View(products.OrderBy(o => o.Price));
+
+                case "priceDesc":
+                    return View(products.OrderByDescending(o => o.Price));
+
+                case "AZ":
+                    return View(products.OrderBy(o => o.Description));
+
+                case "ZA":
+                    return View(products.OrderByDescending(o => o.Description));
+            }
+
+                    
             return View(products);
         }
 

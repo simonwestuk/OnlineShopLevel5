@@ -4,6 +4,41 @@
     ViewData["Title"] = "Home Page";
 }
 
+<form method="get">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="search" id="q" name="q" value="@ViewData["q"]">
+                    <button class="input-group-text" id="search" type="submit">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <button class="input-group-text" id="sortBy" name="sortBy" type="submit" value="price">Sort by Price (Asc)</button>
+                </div>
+            </div>
+             <div class="col-3">
+                <div class="input-group mb-3">
+                    <button class="input-group-text" id="sortBy" name="sortBy" type="submit" value="priceDesc">Sort by Price (Desc)</button>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <button class="input-group-text" id="sortBy" name="sortBy" type="submit" value="AZ">Sort by A - Z</button>
+                </div>
+            </div>
+             <div class="col-3">
+                <div class="input-group mb-3">
+                    <button class="input-group-text" id="sortBy" name="sortBy" type="submit" value="ZA">Sort by Z - A</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <div class="row">
     @{
         foreach (var product in Model)
@@ -13,8 +48,8 @@
                     <img src="@product.ImagePath" class="card-img-top img-product-main" alt="@product.">
                     <div class="card-body">
                         <p class="card-text">@product.Description</p>
-                         <p class="card-text">£@product.Price</p>
-                           <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-ProductId="@product.Id">Add to cart</a>
+                        <p class="card-text">£@product.Price</p>
+                        <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-ProductId="@product.Id">Add to cart</a>
                     </div>
                 </div>
             </div>
